@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 import NoMatch from './NoMatch';
 import ChapterHome from './ChapterHome';
 import Question from './Question';
@@ -7,15 +8,20 @@ import NoQuestions from './NoQuestions';
 import { ScoreContext } from '../score-context';
 
 class ChapterRouter extends Component {
+  static propTypes = {
+    bookId: PropTypes.number.isRequired,
+    bookUrl: PropTypes.string.isRequired,
+    chapter: PropTypes.object.isRequired,
+    chapterId: PropTypes.number.isRequired,
+  };
   render() {
     const { chapter, bookUrl, bookId, chapterId } = this.props;
-
     let displayQuestions;
     let chapterPath = bookUrl + chapter.url;
 
     if (chapter.questions) {
       displayQuestions = chapter.questions.map((question, index) => {
-        let questionPath = chapterPath + '/q' + (index + 1);
+        let questionPath = `${chapterPath}/q${index + 1}`;
 
         return (
           <Route
@@ -46,16 +52,7 @@ class ChapterRouter extends Component {
 
     return (
       <div>
-        <Link
-          style={{ textDecoration: 'none', color: 'black' }}
-          to={chapterPath}
-        >
-          <h3 style={{ fontSize: '24px' }}>{chapter.title}</h3>
-          <h6>
-            More information here:
-            <a href={chapter.chapterLink}> GitHub link to the chapter</a>
-          </h6>
-        </Link>
+        <h3 style={{ fontSize: '24px' }}>{chapter.title}</h3>
         <Switch>
           <Route
             exact
